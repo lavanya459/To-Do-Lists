@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+      background-size: 300% 300%;
+      animation: gradientShift 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .todo-container {
+      backdrop-filter: blur(15px);
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 30px 25px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      width: 380px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #222;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 30px;
+      color: #fff;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      margin-bottom: 15px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(0,0,0,0.2);
+      border-radius: 10px;
+      color: #222;
+      font-size: 16px;
+    }
+
+    input[type="text"]::placeholder {
+      color: #666;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      background: linear-gradient(90deg, #ff6a00, #ee0979);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: linear-gradient(90deg, #ee0979, #ff6a00);
+      transform: translateY(-2px);
+    }
+
+    .delete-selected-btn {
+      background: linear-gradient(90deg, #e53935, #d81b60);
+    }
+
+    .delete-selected-btn:hover {
+      background: linear-gradient(90deg, #d81b60, #e53935);
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 10px;
+      max-height: 260px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.2) transparent;
+    }
+
+    li {
+      background: rgba(255,255,255,0.9);
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #222;
+      font-size: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #555;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="todo-container">
+    <h2>👩🏻‍💻To-Do List📝</h2>
+    <input type="text" id="taskInput" placeholder="Add a new task..." />
+    <button id="addTaskBtn">Add Task 🤹🏻‍♀️</button>
+    <ul id="taskList"></ul>
+    <button class="delete-selected-btn" id="deleteSelectedBtn">Delete🎯</button>
+  </div>
+
+  <script>
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const deleteSelectedBtn = document.getElementById("deleteSelectedBtn");
+    const taskInput = document.getElementById("taskInput");
+    const taskList = document.getElementById("taskList");
+
+    addTaskBtn.addEventListener("click", addTask);
+    deleteSelectedBtn.addEventListener("click", deleteSelected);
+
+    // Listen for Enter key press:
+    taskInput.addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault(); // Prevent form submission behavior
+        addTask();
+      }
+    });
+
+    function addTask() {
+      const taskText = taskInput.value.trim();
+
+      if (taskText === "") {
+        alert("Please enter a task!");
+        return;
+      }
+
+      const li = document.createElement("li");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+
+      const span = document.createElement("span");
+      span.textContent = taskText;
+
+      li.appendChild(checkbox);
+      li.appendChild(span);
+
+      taskList.appendChild(li);
+      taskInput.value = "";
+    }
+
+    function deleteSelected() {
+      const items = taskList.querySelectorAll("li");
+
+      items.forEach(item => {
+        const checkbox = item.querySelector("input[type='checkbox']");
+        if (checkbox.checked) {
+          taskList.removeChild(item);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
